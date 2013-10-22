@@ -56,6 +56,12 @@ public class TimelineActivity extends Activity {
 		return true;
 	}
 	
+	public boolean onRefreshClick(MenuItem mi) {
+		Log.i("info", "onRefreshClick");
+		refresh();
+		return true;
+	}
+	
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		Boolean didTweet = data.getBooleanExtra("didTweet", true);
 		if (!didTweet) {
