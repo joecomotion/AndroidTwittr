@@ -14,28 +14,34 @@ import com.yahoo.jgc.twittr.models.PersistedTweet;
 import com.yahoo.jgc.twittr.models.Tweet;
 
 public class Persistence {
-	static public void save(ArrayList<Tweet> tweets) {
+	static public void save(ArrayList<Tweet> tweets, Boolean purge) {
 		ArrayList<PersistedTweet> pTweets = new Select().from(PersistedTweet.class)
-				             			 	.orderBy("id ASC").execute();
-		long latestTwitterId = pTweets.get(0).twitterId,
-			 //oldestDBId = pTweets.get(pTweets.size() - 1).twitterId,
-			 oldestTwitterId = tweets.get(tweets.size() - 1).getId();
+				             			 	.orderBy("twitterId ASC").execute();
+		long latestSavedTwitterId = 0;
+		
+		if(pTweets.size() > 0) {
+			latestSavedTwitterId = pTweets.get(0).twitterId;
+		}
+		
+	    //long oldestTwitterId = tweets.get(tweets.size() - 1).getId();
 				
-		Log.i("info", "latestTwitterId in DB is " + latestTwitterId);
+		Log.i("info", "latestTwitterId in DB is " + latestSavedTwitterId);
 		//Log.i("info", "oldestTwitterId in DB is " + oldestDBId);
 		
 		ActiveAndroid.beginTransaction();
 		
 		try {
 	        for (Tweet tweet : tweets) {
-	        	if (tweet.getId() > latestTwitterId) {
+	        	if (tweet.getId() > latestSavedTwitterId) {
 		        	(new PersistedTweet(tweet)).save();
 		        	Log.i("info", "Saved tweet " + tweet.getId());
 	        	} 
 	        }
 	         
-	        Log.i("info", "Deleting tweets older than " + oldestTwitterId);
-	        new Delete().from(PersistedTweet.class).where("twitterId > " + oldestTwitterId);
+	        if (purge) {
+	        	//Log.i("info", "Deleting tweets older than " + oldestTwitterId);
+	        	//new Delete().from(PersistedTweet.class).where("twitterId > " + oldestTwitterId);
+	        }	
 	        ActiveAndroid.setTransactionSuccessful();
 		}
 		finally {
@@ -45,11 +51,14 @@ public class Persistence {
 	
 	static public ArrayList<Tweet> load() {
 		ArrayList<Tweet> tweets = new ArrayList<Tweet>();
-		ArrayList<PersistedTweet> pTweets = new Select().from(PersistedTweet.class).execute();
+		ArrayList<PersistedTweet> pTweets = new Select().from(PersistedTweet.class)
+														.orderBy("twitterId DESC").execute();
 		for (PersistedTweet pTweet : pTweets){
 			if(pTweet.json != null){
 				try {
-					tweets.add(Tweet.fromJson(new JSONObject(pTweet.json)));
+					Tweet tmp = Tweet.fromJson(new JSONObject(pTweet.json));
+					Log.i("info", "loaded tweet id:" + tmp.getId() + " body:" + tmp.getBody());
+					tweets.add(tmp);
 				} catch (JSONException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -58,5 +67,11 @@ public class Persistence {
 		}
 		
 		return tweets;
+	}
+
+	public static void save(Tweet tweet) {
+		ArrayList<Tweet> tweets = new ArrayList<Tweet>();
+		tweets.add(tweet);
+		Persistence.save(tweets, false);
 	}
 }
