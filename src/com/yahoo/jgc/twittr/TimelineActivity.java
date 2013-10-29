@@ -109,9 +109,11 @@ public class TimelineActivity extends FragmentActivity implements TabListener, T
 	}
 
 	@Override
-	public void onClick(User u) {
+	public void onProfileClick(User u) {
 		Log.i("info", "Timeline activity got click or user " + u.getName());
-		
+		Intent i = new Intent(this, ProfileActivity.class);
+		i.putExtra("id", u.getId());
+		startActivity(i);
 	}
 
 }

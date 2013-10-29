@@ -25,13 +25,13 @@ public class TweetsAdapter extends ArrayAdapter<Tweet>{
 		if (context instanceof OnProfileImageClickedListener) {
 	        listener = (OnProfileImageClickedListener) context;
 	      } else {
-	        throw new ClassCastException(context.toString()
-	            + " must implement TweetsAdapter.OnProfileImageClickedListener");
+	        Log.i("warning", context.toString()
+	              + " doesn't implement TweetsAdapter.OnProfileImageClickedListener");
 	      }
 	}
 	
 	public interface OnProfileImageClickedListener {
-		public void onClick(User u);
+		public void onProfileClick(User u);
 	}
 	
 	@Override
@@ -53,7 +53,9 @@ public class TweetsAdapter extends ArrayAdapter<Tweet>{
 			public void onClick(View v) {
 				Tweet t = (Tweet)v.getTag();
 				Log.i("info", "got click for tweet " + t.getUser().getName());
-				listener.onClick(t.getUser());
+				if (listener != null) {
+					listener.onProfileClick(t.getUser());
+				}
 			}
         	
         });

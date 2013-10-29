@@ -18,18 +18,34 @@ public class ProfileActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_profile);
-		loadProfileInfo();
+		long userId = getIntent().getLongExtra("id", 0);
+		if (userId == 0) {
+			loadMyProfileInfo();
+		} 
+		else { 
+			loadOtherProfileInfo(userId);	
+		} 
 	}
 
-	private void loadProfileInfo() {
+	private void handleClientResponse(JSONObject json){
+		User u = User.fromJson(json);
+		getActionBar().setTitle("@" + u.getScreenName());
+		populateProfileHeader(u);
+	}
+	
+	private void loadMyProfileInfo() {
 		TwittrApp.getRestClient().getMyInfo(new JsonHttpResponseHandler(){
 			public void onSuccess(JSONObject json){
-				User u = User.fromJson(json);
-				getActionBar().setTitle("@" + u.getScreenName());
-				populateProfileHeader(u);
+				handleClientResponse(json);
 			}
+		});
+	}
 
-
+	private void loadOtherProfileInfo(long userId) {
+		TwittrApp.getRestClient().getUserInfo(userId, new JsonHttpResponseHandler(){
+			public void onSuccess(JSONObject json){
+				handleClientResponse(json);
+			}
 		});
 	}
 	
