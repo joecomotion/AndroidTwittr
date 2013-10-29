@@ -15,11 +15,23 @@ import android.widget.TextView;
 
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.yahoo.jgc.twittr.models.Tweet;
+import com.yahoo.jgc.twittr.models.User;
 
 public class TweetsAdapter extends ArrayAdapter<Tweet>{
+	private OnProfileImageClickedListener listener;
 
 	public TweetsAdapter(Context context, List<Tweet> tweets) {
 		super(context, 0, tweets);
+		if (context instanceof OnProfileImageClickedListener) {
+	        listener = (OnProfileImageClickedListener) context;
+	      } else {
+	        throw new ClassCastException(context.toString()
+	            + " must implement TweetsAdapter.OnProfileImageClickedListener");
+	      }
+	}
+	
+	public interface OnProfileImageClickedListener {
+		public void onClick(User u);
 	}
 	
 	@Override
@@ -41,7 +53,7 @@ public class TweetsAdapter extends ArrayAdapter<Tweet>{
 			public void onClick(View v) {
 				Tweet t = (Tweet)v.getTag();
 				Log.i("info", "got click for tweet " + t.getUser().getName());
-				
+				listener.onClick(t.getUser());
 			}
         	
         });

@@ -2,19 +2,19 @@ package com.yahoo.jgc.twitter.fragments;
 
 import java.util.ArrayList;
 
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ListView;
 
 import com.yahoo.jgc.twittr.R;
 import com.yahoo.jgc.twittr.TweetsAdapter;
 import com.yahoo.jgc.twittr.models.Tweet;
+import com.yahoo.jgc.twittr.models.User;
 
 public class TweetsListFragment extends Fragment {
 	ArrayList<Tweet> tweets;

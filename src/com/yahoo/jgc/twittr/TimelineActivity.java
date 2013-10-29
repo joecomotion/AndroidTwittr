@@ -11,14 +11,13 @@ import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.LinearLayout;
 
 import com.yahoo.jgc.twitter.fragments.HomeTimelineFragment;
 import com.yahoo.jgc.twitter.fragments.MentionsFragment;
 import com.yahoo.jgc.twittr.models.Tweet;
+import com.yahoo.jgc.twittr.models.User;
 
-public class TimelineActivity extends FragmentActivity implements TabListener {
+public class TimelineActivity extends FragmentActivity implements TabListener, TweetsAdapter.OnProfileImageClickedListener {
 	HomeTimelineFragment homeTimelineFragment;
 	
 	@Override
@@ -106,6 +105,12 @@ public class TimelineActivity extends FragmentActivity implements TabListener {
 	@Override
 	public void onTabUnselected(Tab tab, FragmentTransaction ft) {
 		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onClick(User u) {
+		Log.i("info", "Timeline activity got click or user " + u.getName());
 		
 	}
 
