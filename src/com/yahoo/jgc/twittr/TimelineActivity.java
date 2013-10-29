@@ -1,7 +1,5 @@
 package com.yahoo.jgc.twittr;
 
-import org.json.JSONObject;
-
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.ActionBar.TabListener;
@@ -13,10 +11,11 @@ import android.support.v4.app.FragmentManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.LinearLayout;
 
 import com.yahoo.jgc.twitter.fragments.HomeTimelineFragment;
 import com.yahoo.jgc.twitter.fragments.MentionsFragment;
-import com.yahoo.jgc.twitter.fragments.TweetsListFragment;
 import com.yahoo.jgc.twittr.models.Tweet;
 
 public class TimelineActivity extends FragmentActivity implements TabListener {
@@ -82,7 +81,7 @@ public class TimelineActivity extends FragmentActivity implements TabListener {
 		
 		homeTimelineFragment.cacheNewTweet(Tweet.fromJsonString(jsonTweet));
 	}
-
+	
 	@Override
 	public void onTabReselected(Tab tab, FragmentTransaction ft) {
 		// TODO Auto-generated method stub

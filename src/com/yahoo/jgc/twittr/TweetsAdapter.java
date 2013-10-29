@@ -4,8 +4,10 @@ import java.util.List;
 
 import android.content.Context;
 import android.text.Html;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -32,6 +34,17 @@ public class TweetsAdapter extends ArrayAdapter<Tweet>{
         
         ImageView imageView = (ImageView) view.findViewById(R.id.ivProfile);
         ImageLoader.getInstance().displayImage(tweet.getUser().getProfileImageUrl(), imageView);
+        imageView.setTag(tweet);
+        imageView.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				Tweet t = (Tweet)v.getTag();
+				Log.i("info", "got click for tweet " + t.getUser().getName());
+				
+			}
+        	
+        });
         
         TextView nameView = (TextView) view.findViewById(R.id.tvName);
         String formattedName = "<b>" + tweet.getUser().getName() + "</b>" + " <small><font color='#777777'>@" +
