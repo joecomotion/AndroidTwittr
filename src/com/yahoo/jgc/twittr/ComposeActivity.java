@@ -11,7 +11,6 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.yahoo.jgc.twittr.models.Tweet;
 
 public class ComposeActivity extends Activity {
 	EditText etCompose;
@@ -46,9 +45,10 @@ public class ComposeActivity extends Activity {
 			}
 			public void onSuccess(int arg0, JSONObject result){
 				Log.i("info", "tweet posted! " +  result.toString());
-				Persistence.save(Tweet.fromJson(result));
+				//Persistence.save(Tweet.fromJson(result));
 				Intent data = new Intent();
-				data.putExtra("didTweet", true);
+				data.putExtra("tweet", result.toString());
+				
 				// Activity finished ok, return the data
 				setResult(RESULT_OK, data); // set result code and bundle data for response
 				that.finish();

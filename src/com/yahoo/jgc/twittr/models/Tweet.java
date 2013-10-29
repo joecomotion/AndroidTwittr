@@ -40,6 +40,16 @@ public class Tweet extends BaseModel {
         }
         return tweet;
     }
+    
+    public static Tweet fromJsonString(String s) {
+        try {
+        	JSONObject o = new JSONObject(s);
+        	return Tweet.fromJson(o);
+        } catch (JSONException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 
     public static ArrayList<Tweet> fromJson(JSONArray jsonArray) {
         ArrayList<Tweet> tweets = new ArrayList<Tweet>(jsonArray.length());

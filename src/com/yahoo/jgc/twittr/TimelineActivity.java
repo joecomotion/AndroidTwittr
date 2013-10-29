@@ -1,6 +1,6 @@
 package com.yahoo.jgc.twittr;
 
-import java.util.ArrayList;
+import org.json.JSONObject;
 
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
@@ -20,6 +20,8 @@ import com.yahoo.jgc.twitter.fragments.TweetsListFragment;
 import com.yahoo.jgc.twittr.models.Tweet;
 
 public class TimelineActivity extends FragmentActivity implements TabListener {
+	HomeTimelineFragment homeTimelineFragment;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {	
 		super.onCreate(savedInstanceState);
@@ -71,13 +73,14 @@ public class TimelineActivity extends FragmentActivity implements TabListener {
 	}
 	
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		Boolean didTweet = data.getBooleanExtra("didTweet", true);
-		if (!didTweet) {
+		String jsonTweet = data.getStringExtra("tweet");
+		if (jsonTweet == null) {
 			return;
 		}
 		
 		Log.i("info", "got new tweet");
-		//refresh();
+		
+		homeTimelineFragment.cacheNewTweet(Tweet.fromJsonString(jsonTweet));
 	}
 
 	@Override
@@ -91,7 +94,8 @@ public class TimelineActivity extends FragmentActivity implements TabListener {
 		FragmentManager manager = getSupportFragmentManager();
 		android.support.v4.app.FragmentTransaction fts = manager.beginTransaction();
 		if (tab.getTag() == "HomeTimelineFragment") {
-			fts.replace(R.id.frameContainer, new HomeTimelineFragment());
+			homeTimelineFragment = new HomeTimelineFragment();
+			fts.replace(R.id.frameContainer, homeTimelineFragment);
 		}
 		else {
 			fts.replace(R.id.frameContainer, new MentionsFragment());
@@ -105,19 +109,5 @@ public class TimelineActivity extends FragmentActivity implements TabListener {
 		// TODO Auto-generated method stub
 		
 	}
-	
-	/*public void updateFromPersistence() {
-		TweetsListFragment fragment = (TweetsListFragment)
-				getSupportFragmentManager().findFragmentById(R.id.fragmentTweets);
-		
-		ArrayList<Tweet> tweets = Persistence.load();
-		fragment.getAdapter().clear();
-		fragment.getAdapter().addAll(tweets);		
-		
-		Log.i("info", "Tweets loaded:" + tweets.size());
-		if (tweets.size() > 0) {
-			Log.i("info", "Newest loaded:" + tweets.get(0).getId() + " " + tweets.get(0).getBody());
-		}
-	}*/
 
 }
