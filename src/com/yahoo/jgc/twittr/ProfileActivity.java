@@ -4,12 +4,14 @@ import org.json.JSONObject;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentTransaction;
 import android.view.Menu;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.loopj.android.http.JsonHttpResponseHandler;
 import com.nostra13.universalimageloader.core.ImageLoader;
+import com.yahoo.jgc.twitter.fragments.UserTimelineFragment;
 import com.yahoo.jgc.twittr.models.User;
 
 public class ProfileActivity extends FragmentActivity {
@@ -19,6 +21,10 @@ public class ProfileActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_profile);
 		long userId = getIntent().getLongExtra("id", 0);
+		
+		FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+		ft.replace(R.id.frameUserTimeline, UserTimelineFragment.newInstance(userId));
+		ft.commit();
 		if (userId == 0) {
 			loadMyProfileInfo();
 		} 
